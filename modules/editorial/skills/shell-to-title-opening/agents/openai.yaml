@@ -1,0 +1,4 @@
+interface:
+  display_name: "Shell to Title + Opening"
+  short_description: "基于同一个明确 Shell 联合生成配套的视频标题与开场候选"
+  default_prompt: "Use $shell-to-title-opening to generate paired title and opening candidates from my confirmed Core and Shell."

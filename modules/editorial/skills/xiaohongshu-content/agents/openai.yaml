@@ -1,0 +1,4 @@
+interface:
+  display_name: "Xiaohongshu Content"
+  short_description: "Adapt BaseContent for Xiaohongshu"
+  default_prompt: "Adapt an exact BaseContent revision into native Xiaohongshu graphic or video content."

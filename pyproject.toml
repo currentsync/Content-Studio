@@ -1,0 +1,19 @@
+[project]
+name = "content-studio"
+version = "0.1.0"
+description = "Agent-facing content creation workflow and media production tools"
+requires-python = ">=3.12"
+dependencies = [
+  "jsonschema>=4.26,<5",
+  "PyYAML>=6.0,<7",
+  "numpy>=2,<3",
+  "Pillow>=11,<13",
+  "playwright>=1.55,<2",
+]
+
+[tool.uv]
+package = false
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"

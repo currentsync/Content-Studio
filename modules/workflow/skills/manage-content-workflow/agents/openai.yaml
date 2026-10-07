@@ -1,0 +1,4 @@
+interface:
+  display_name: "Content Workflow Manager"
+  short_description: "Route and record the content workflow"
+  default_prompt: "Use $manage-content-workflow to inspect this content project and advance its next valid workflow stage."

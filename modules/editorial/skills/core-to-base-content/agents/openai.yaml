@@ -1,0 +1,4 @@
+interface:
+  display_name: "Core to Base Content"
+  short_description: "Build platform-neutral content semantics"
+  default_prompt: "Convert a confirmed Core into a platform-neutral BaseContent knowledge structure."

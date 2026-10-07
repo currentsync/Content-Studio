@@ -1,0 +1,4 @@
+interface:
+  display_name: "Idea to Core"
+  short_description: "Clarify ideas into evidence-aware creative cores"
+  default_prompt: "Use $idea-to-core to help me clarify this idea, learn the necessary concepts, and define a creation-ready Core."

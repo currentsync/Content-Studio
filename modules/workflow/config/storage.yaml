@@ -1,0 +1,11 @@
+version: 1
+repository_root: ../../..
+projects: ../../../projects
+archive: ../../../projects/archive
+runtime_log: ../../../runtime/runs.jsonl
+project_snapshot: project.yaml
+project_index: ../../../projects/index.yaml
+path_policy:
+  project_refs: relative_to_project
+  reject_absolute: true
+  reject_escape: true

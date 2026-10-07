@@ -1,0 +1,4 @@
+interface:
+  display_name: "Xiaohongshu Shell"
+  short_description: "Adapt BaseShell for Xiaohongshu"
+  default_prompt: "Adapt a selected BaseShell into Xiaohongshu channel Shell candidates."

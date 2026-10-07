@@ -1,0 +1,1265 @@
+﻿{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:content-studio:contracts:1",
+  "title": "Content Studio agent-facing contracts",
+  "description": "Persistent Content Studio records. File existence, digest, real approvals and dependency rules are checked by the Workflow validator.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/ProjectSnapshot"
+    },
+    {
+      "$ref": "#/$defs/ProjectBrief"
+    },
+    {
+      "$ref": "#/$defs/CreativePlan"
+    },
+    {
+      "$ref": "#/$defs/ProductionRequest"
+    },
+    {
+      "$ref": "#/$defs/ArtifactManifest"
+    },
+    {
+      "$ref": "#/$defs/ReviewReport"
+    },
+    {
+      "$ref": "#/$defs/AssetManifest"
+    },
+    {
+      "$ref": "#/$defs/Timing"
+    },
+    {
+      "$ref": "#/$defs/RuntimeEntry"
+    }
+  ],
+  "$defs": {
+    "ArtifactRef": {
+      "type": "object",
+      "properties": {
+        "artifact_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "artifact_id",
+        "path",
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "Approval": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "enum": [
+            "core",
+            "base_shell",
+            "channel_shell",
+            "packaging",
+            "script",
+            "direction",
+            "delivery",
+            "complete"
+          ]
+        },
+        "artifact": {
+          "$ref": "#/$defs/ArtifactRef"
+        },
+        "evidence": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "kind",
+        "artifact",
+        "evidence"
+      ],
+      "additionalProperties": false
+    },
+    "Task": {
+      "type": "object",
+      "properties": {
+        "task_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_-]*$"
+        },
+        "shot_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "operation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "pending",
+            "running",
+            "blocked",
+            "awaiting_review",
+            "needs_revision",
+            "passed",
+            "failed"
+          ]
+        },
+        "depends_on": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "input_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ArtifactRef"
+          }
+        },
+        "output_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ArtifactRef"
+          }
+        }
+      },
+      "required": [
+        "task_id",
+        "operation",
+        "status"
+      ],
+      "additionalProperties": false
+    },
+    "Channel": {
+      "type": "object",
+      "properties": {
+        "target_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_-]*$"
+        },
+        "channel": {
+          "enum": [
+            "bilibili",
+            "xiaohongshu"
+          ]
+        },
+        "format": {
+          "enum": [
+            "video",
+            "graphic"
+          ]
+        },
+        "current": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "production": {
+          "type": "object",
+          "properties": {
+            "phase": {
+              "type": "string",
+              "minLength": 1
+            },
+            "tasks": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Task"
+              }
+            }
+          },
+          "required": [
+            "phase"
+          ],
+          "additionalProperties": false
+        },
+        "delivery_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ArtifactRef"
+          }
+        }
+      },
+      "required": [
+        "target_id",
+        "channel",
+        "format",
+        "current"
+      ],
+      "additionalProperties": false
+    },
+    "ProjectSnapshot": {
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "project_snapshot"
+        },
+        "schema_version": {
+          "const": "3.0"
+        },
+        "project_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_-]*$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "enum": [
+            "knowledge",
+            "account_intro",
+            "legacy_media"
+          ]
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "phase": {
+          "type": "string",
+          "minLength": 1
+        },
+        "core_status": {
+          "enum": [
+            "missing",
+            "draft",
+            "confirmed",
+            "not_applicable"
+          ]
+        },
+        "current": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "channels": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Channel"
+          }
+        },
+        "completed": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "todo": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "waiting_for_user": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "approvals": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Approval"
+          }
+        },
+        "migration": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "required": [
+        "record_type",
+        "schema_version",
+        "project_id",
+        "name",
+        "kind",
+        "updated_at",
+        "phase",
+        "core_status",
+        "current",
+        "channels",
+        "completed",
+        "todo"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "knowledge"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "core_status": {
+                "enum": [
+                  "missing",
+                  "draft",
+                  "confirmed"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "account_intro"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "core_status": {
+                "const": "not_applicable"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "ProjectBrief": {
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "project_brief"
+        },
+        "schema_version": {
+          "const": "1.0"
+        },
+        "project_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_-]*$"
+        },
+        "based_on": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ArtifactRef"
+          }
+        },
+        "audience": {
+          "type": "string",
+          "minLength": 1
+        },
+        "learning_outcome": {
+          "type": "string",
+          "minLength": 1
+        },
+        "content_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ArtifactRef"
+          }
+        },
+        "constraints": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "targets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "target_id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9_-]*$"
+              },
+              "channel": {
+                "enum": [
+                  "bilibili",
+                  "xiaohongshu"
+                ]
+              },
+              "format": {
+                "enum": [
+                  "video",
+                  "graphic"
+                ]
+              },
+              "content_ref": {
+                "$ref": "#/$defs/ArtifactRef"
+              },
+              "shell_ref": {
+                "$ref": "#/$defs/ArtifactRef"
+              },
+              "script_ref": {
+                "$ref": "#/$defs/ArtifactRef"
+              },
+              "opening_ref": {
+                "$ref": "#/$defs/ArtifactRef"
+              },
+              "delivery": {
+                "type": "object",
+                "properties": {
+                  "width": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "height": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "fps": {
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                  },
+                  "duration_range_seconds": {
+                    "type": "array",
+                    "prefixItems": [
+                      {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "number",
+                        "minimum": 0
+                      }
+                    ],
+                    "minItems": 2,
+                    "maxItems": 2
+                  },
+                  "narration": {
+                    "enum": [
+                      "required",
+                      "none",
+                      "optional"
+                    ]
+                  },
+                  "subtitles": {
+                    "enum": [
+                      "required",
+                      "none",
+                      "optional"
+                    ]
+                  },
+                  "outputs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "alpha": {
+                    "type": "boolean"
+                  },
+                  "path": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "outputs"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "target_id",
+              "channel",
+              "format",
+              "content_ref",
+              "delivery"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "record_type",
+        "schema_version",
+        "project_id",
+        "audience",
+        "learning_outcome",
+        "content_refs",
+        "targets"
+      ],
+      "additionalProperties": false
+    },
+    "CreativePlan": {
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "creative_plan"
+        },
+        "schema_version": {
+          "const": "1.0"
+        },
+        "project_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_-]*$"
+        },
+        "target_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_-]*$"
+        },
+        "based_on": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ArtifactRef"
+          }
+        },
+        "direction": {
+          "type": "object",
+          "properties": {
+            "style": {
+              "type": "string",
+              "minLength": 1
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            },
+            "expression": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "style",
+            "reason"
+          ],
+          "additionalProperties": false
+        },
+        "units": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "unit_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "shot_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "page_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "purpose": {
+                "type": "string",
+                "minLength": 1
+              },
+              "content_refs": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/ArtifactRef"
+                }
+              },
+              "asset_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "native_ref": {
+                "$ref": "#/$defs/ArtifactRef"
+              }
+            },
+            "required": [
+              "unit_id",
+              "purpose",
+              "content_refs"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "asset_requests": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "implementation": {
+          "type": "object",
+          "properties": {
+            "capability": {
+              "type": "string",
+              "minLength": 1
+            },
+            "entry": {
+              "$ref": "#/$defs/ArtifactRef"
+            },
+            "native_options": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "capability",
+            "entry"
+          ],
+          "additionalProperties": false
+        },
+        "representative_outputs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ArtifactRef"
+          }
+        }
+      },
+      "required": [
+        "record_type",
+        "schema_version",
+        "project_id",
+        "target_id",
+        "based_on",
+        "direction",
+        "units",
+        "implementation"
+      ],
+      "additionalProperties": false
+    },
+    "ProductionRequest": {
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "production_request"
+        },
+        "schema_version": {
+          "const": "1.0"
+        },
+        "project_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_-]*$"
+        },
+        "target_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_-]*$"
+        },
+        "based_on": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ArtifactRef"
+          }
+        },
+        "operation": {
+          "enum": [
+            "preview",
+            "render_clip",
+            "render_film",
+            "assemble"
+          ]
+        },
+        "capability": {
+          "type": "string",
+          "minLength": 1
+        },
+        "native_input": {
+          "$ref": "#/$defs/ArtifactRef"
+        },
+        "assets_ref": {
+          "$ref": "#/$defs/ArtifactRef"
+        },
+        "timing_ref": {
+          "$ref": "#/$defs/ArtifactRef"
+        },
+        "output": {
+          "type": "object",
+          "properties": {
+            "width": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "height": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "fps": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "duration_range_seconds": {
+              "type": "array",
+              "prefixItems": [
+                {
+                  "type": "number",
+                  "minimum": 0
+                },
+                {
+                  "type": "number",
+                  "minimum": 0
+                }
+              ],
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "narration": {
+              "enum": [
+                "required",
+                "none",
+                "optional"
+              ]
+            },
+            "subtitles": {
+              "enum": [
+                "required",
+                "none",
+                "optional"
+              ]
+            },
+            "outputs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "alpha": {
+              "type": "boolean"
+            },
+            "path": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "outputs"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "record_type",
+        "schema_version",
+        "project_id",
+        "target_id",
+        "based_on",
+        "operation",
+        "capability",
+        "native_input",
+        "output"
+      ],
+      "additionalProperties": false
+    },
+    "ArtifactManifest": {
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "artifact_manifest"
+        },
+        "schema_version": {
+          "const": "1.0"
+        },
+        "project_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_-]*$"
+        },
+        "target_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_-]*$"
+        },
+        "based_on": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ArtifactRef"
+          }
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "role": {
+                "type": "string",
+                "minLength": 1
+              },
+              "ref": {
+                "$ref": "#/$defs/ArtifactRef"
+              },
+              "media": {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "enum": [
+                      "video",
+                      "image",
+                      "audio",
+                      "subtitle"
+                    ]
+                  },
+                  "width": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "height": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "fps": {
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                  },
+                  "frame_count": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "duration": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "audio_present": {
+                    "type": "boolean"
+                  },
+                  "container": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "alpha": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "kind"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "role",
+              "ref",
+              "media"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "required": [
+        "record_type",
+        "schema_version",
+        "project_id",
+        "target_id",
+        "based_on",
+        "artifacts"
+      ],
+      "additionalProperties": false
+    },
+    "ReviewReport": {
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "review_report"
+        },
+        "schema_version": {
+          "const": "1.0"
+        },
+        "project_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_-]*$"
+        },
+        "target_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_-]*$"
+        },
+        "based_on": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ArtifactRef"
+          }
+        },
+        "review_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_-]*$"
+        },
+        "reviewed_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ArtifactRef"
+          }
+        },
+        "scope": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "issue_id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9_-]*$"
+              },
+              "owner": {
+                "enum": [
+                  "editorial",
+                  "creative",
+                  "production",
+                  "workflow"
+                ]
+              },
+              "location": {
+                "type": "string",
+                "minLength": 1
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              },
+              "blocking": {
+                "type": "boolean"
+              },
+              "resolution": {
+                "enum": [
+                  "open",
+                  "resolved",
+                  "accepted"
+                ]
+              }
+            },
+            "required": [
+              "issue_id",
+              "owner",
+              "location",
+              "reason",
+              "blocking",
+              "resolution"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "conclusion": {
+          "enum": [
+            "pass",
+            "revise",
+            "blocked"
+          ]
+        },
+        "independent": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "record_type",
+        "schema_version",
+        "project_id",
+        "target_id",
+        "review_id",
+        "reviewed_refs",
+        "scope",
+        "findings",
+        "conclusion",
+        "independent"
+      ],
+      "additionalProperties": false
+    },
+    "AssetManifest": {
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "asset_manifest"
+        },
+        "schema_version": {
+          "const": "1.0"
+        },
+        "project_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_-]*$"
+        },
+        "based_on": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ArtifactRef"
+          }
+        },
+        "assets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "asset_id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9_-]*$"
+              },
+              "ref": {
+                "$ref": "#/$defs/ArtifactRef"
+              },
+              "origin": {
+                "type": "string",
+                "minLength": 1
+              },
+              "allowed_usage": {
+                "enum": [
+                  "production",
+                  "demo_only",
+                  "unknown"
+                ]
+              },
+              "license_ref": {
+                "type": "string",
+                "minLength": 1
+              },
+              "media": {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "enum": [
+                      "video",
+                      "image",
+                      "audio",
+                      "subtitle"
+                    ]
+                  },
+                  "width": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "height": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "fps": {
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                  },
+                  "frame_count": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "duration": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "audio_present": {
+                    "type": "boolean"
+                  },
+                  "container": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "alpha": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "kind"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "asset_id",
+              "ref",
+              "origin",
+              "allowed_usage"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "record_type",
+        "schema_version",
+        "project_id",
+        "assets"
+      ],
+      "additionalProperties": false
+    },
+    "Timing": {
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "timing"
+        },
+        "schema_version": {
+          "const": "1.0"
+        },
+        "project_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_-]*$"
+        },
+        "target_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_-]*$"
+        },
+        "based_on": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ArtifactRef"
+          }
+        },
+        "precision": {
+          "enum": [
+            "segment",
+            "word",
+            "character",
+            "manual",
+            "bpm"
+          ]
+        },
+        "script_ref": {
+          "$ref": "#/$defs/ArtifactRef"
+        },
+        "audio_ref": {
+          "$ref": "#/$defs/ArtifactRef"
+        },
+        "unit": {
+          "const": "seconds"
+        },
+        "segments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "segment_id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9_-]*$"
+              },
+              "start": {
+                "type": "number",
+                "minimum": 0
+              },
+              "end": {
+                "type": "number",
+                "minimum": 0
+              },
+              "text": {
+                "type": "string",
+                "minLength": 1
+              },
+              "anchors": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "anchor_id": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9][a-z0-9_-]*$"
+                    },
+                    "text": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "occurrence": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "start": {
+                      "type": "number",
+                      "minimum": 0
+                    },
+                    "end": {
+                      "type": "number",
+                      "minimum": 0
+                    }
+                  },
+                  "required": [
+                    "anchor_id",
+                    "start",
+                    "end"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "segment_id",
+              "start",
+              "end"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "record_type",
+        "schema_version",
+        "project_id",
+        "target_id",
+        "precision",
+        "script_ref",
+        "unit",
+        "segments"
+      ],
+      "additionalProperties": false
+    },
+    "RuntimeEntry": {
+      "type": "object",
+      "properties": {
+        "time": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "project_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "workflow": {
+          "type": "string",
+          "minLength": 1
+        },
+        "result": {
+          "enum": [
+            "succeeded",
+            "no_op",
+            "blocked",
+            "failed"
+          ]
+        },
+        "detail": {
+          "type": "string"
+        },
+        "outputs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "time",
+        "project_id",
+        "workflow",
+        "result"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
+

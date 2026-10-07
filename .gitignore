@@ -1,0 +1,69 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+dist/
+build/
+
+# Local configuration and temporary output
+.env
+.env.*
+!.env.example
+*.tmp
+*.swp
+*.log
+
+# Generated media and browser state
+node_modules/
+coverage/
+playwright-report/
+test-results/
+.pytest_cache/
+.hypothesis/
+.ruff_cache/
+.mypy_cache/
+.coverage
+coverage.xml
+
+# Conventional local build/render output at repository root
+/build-output/
+/render-output/
+/rendered/
+/renders/
+/output/
+/outputs/
+/previews/
+/tmp/
+/temp/
+/.cache/
+/*.mp4
+/*.mov
+/*.webm
+/*.mkv
+/*.wav
+/*.mp3
+/*.aac
+/preview_*.png
+/render_*.png
+
+# Private/local project data: export intentionally reviewed projects separately
+/projects/**
+!/projects/.gitkeep
+!/projects/README.md
+!/projects/index-temp.yaml
+/projects/index.yaml
+/runtime/**
+!/runtime/.gitkeep
+
+# Huashu character art and animation frames are not included in the upstream MIT
+# grant. These rules prevent accidental reintroduction into the public product.
+/modules/creative/examples/demos/_shared/hero/
+/modules/creative/examples/demos/long_scroll/frames/
+
+# Operating system and editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

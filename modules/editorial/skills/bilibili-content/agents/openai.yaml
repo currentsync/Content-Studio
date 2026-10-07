@@ -1,0 +1,4 @@
+interface:
+  display_name: "Bilibili Content"
+  short_description: "Adapt BaseContent for Bilibili"
+  default_prompt: "Adapt an exact BaseContent revision into a native Bilibili video editorial plan."

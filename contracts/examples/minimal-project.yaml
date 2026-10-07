@@ -1,0 +1,16 @@
+record_type: project_snapshot
+schema_version: '3.0'
+project_id: example-project
+name: 项目标题
+kind: knowledge
+updated_at: '2026-10-07T00:00:00Z'
+phase: ideation
+core_status: missing
+current: {}
+channels: []
+completed: []
+todo:
+  - capture-idea
+waiting_for_user: null
+notes: []
+approvals: []

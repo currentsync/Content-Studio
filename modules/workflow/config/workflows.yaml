@@ -1,0 +1,71 @@
+version: 1
+state_owner: modules/workflow
+steps:
+  capture-idea:
+    owner: editorial
+    skill: modules/editorial/skills/idea-to-core/SKILL.md
+    requires: [creator_idea]
+  idea_to_core:
+    owner: editorial
+    skill: modules/editorial/skills/idea-to-core/SKILL.md
+    requires: [idea]
+    produces: [content/core.md]
+    user_decision: core
+  core_to_base:
+    owner: editorial
+    skill: modules/editorial/skills/core-to-base-content/SKILL.md
+    requires: [confirmed_core]
+    produces: [content/base-content.md]
+  core_to_shell:
+    owner: editorial
+    skill: modules/editorial/skills/core-to-shell/SKILL.md
+    requires: [confirmed_core]
+    produces: [content/base-shell.md]
+  channel_content:
+    owner: editorial
+    skill: channel-specific
+    requires: [base_content, channel]
+    user_decision: content_coverage
+  channel_shell:
+    owner: editorial
+    skill: channel-specific
+    requires: [base_shell, channel]
+    user_decision: channel_shell
+  title_and_opening:
+    owner: editorial
+    skill: modules/editorial/skills/shell-to-title-opening/SKILL.md
+    requires: [selected_channel_shell]
+    user_decision: title_and_opening
+  compose_script:
+    owner: editorial
+    skill: modules/editorial/skills/compose-script/SKILL.md
+    requires: [confirmed_core, channel_content, selected_opening]
+    produces: [channels/<target>/content/script.md, channels/<target>/brief.yaml]
+  direct_visual_story:
+    owner: creative
+    skill: modules/creative/skills/direct-visual-story/SKILL.md
+    requires: [confirmed_script, assets_manifest]
+    user_decision: creative_direction
+    produces: [channels/<target>/creative/plan.yaml]
+  produce_media:
+    owner: production
+    skill: modules/production/skills/produce-media/SKILL.md
+    requires: [confirmed_creative_direction, production_request]
+  review_media:
+    owner: review
+    skill: modules/review/skills/review-media/SKILL.md
+    requires: [current_artifact_manifest]
+    independent_reviewer: true
+  confirm-account-facts:
+    owner: editorial
+    skill: account-introduction
+    requires: [account_facts]
+    user_decision: account_script
+  review-existing-media:
+    owner: review
+    skill: modules/review/skills/review-media/SKILL.md
+    requires: [existing_media_inventory]
+  archive:
+    owner: workflow
+    command: modules/workflow/scripts/studio.py archive
+    requires: [delivery_confirmed, complete_confirmed, no_open_todo]

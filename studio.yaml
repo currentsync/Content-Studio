@@ -1,0 +1,9 @@
+name: Content Studio
+repository_id: content-studio
+schema_version: 1
+paths:
+  modules: modules
+  projects: projects
+  archive: projects/archive
+  runtime: runtime
+  contracts: contracts

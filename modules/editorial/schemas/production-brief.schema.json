@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:content-studio:editorial:production-brief:1",
+  "title": "Editorial production brief",
+  "type": "object",
+  "$defs": {
+    "ArtifactRef": {
+      "type": "object",
+      "properties": {
+        "artifact_id": {"type": "string", "minLength": 1},
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      },
+      "required": ["artifact_id", "path", "sha256"],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "project_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_-]*$"},
+    "target_id": {"type": "string", "minLength": 1},
+    "based_on": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/ArtifactRef"}},
+    "audience": {"type": "string", "minLength": 1},
+    "learning_outcome": {"type": "string", "minLength": 1},
+    "opening_handoff": {"type": ["string", "null"]},
+    "content_boundaries": {"type": "array", "items": {"type": "string"}},
+    "sections": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "section_id": {"type": "string", "minLength": 1},
+          "purpose": {"type": "string", "minLength": 1},
+          "narration": {"type": "string", "minLength": 1},
+          "content_refs": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/ArtifactRef"}},
+          "on_screen_facts": {"type": "array", "items": {"type": "string"}},
+          "must_not_imply": {"type": "array", "items": {"type": "string"}}
+        },
+        "required": ["section_id", "purpose", "narration", "content_refs", "on_screen_facts", "must_not_imply"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["project_id", "target_id", "based_on", "audience", "learning_outcome", "opening_handoff", "content_boundaries", "sections"],
+  "additionalProperties": false
+}

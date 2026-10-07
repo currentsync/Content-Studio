@@ -1,0 +1,4 @@
+# Safe starter template for a local project index.
+# Copy this file to index.yaml for local use; Workflow regenerates index.yaml.
+generated_at: null
+projects: []

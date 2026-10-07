@@ -1,0 +1,5 @@
+﻿interface:
+  display_name: "Generate IP Thumbnail"
+  short_description: "Create shell-first, relation-driven IP video thumbnails"
+  default_prompt: "Use $generate-ip-thumbnail with the Shell I selected. Do not infer or select a Shell from the title or summary. Generate the final platform-native thumbnail from the selected Shell, content summary, optional portrait, and platform."
+

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Core to Shell"
+  short_description: "Create distinct, credible Shell candidates from a Core"
+  default_prompt: "Use $core-to-shell to turn this Core into 5–8 distinct Shell candidates."

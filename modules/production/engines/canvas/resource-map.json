@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "description": "Map the renderer's stable logical URLs to the responsible Creative and Production modules.",
+  "routes": [
+    {"prefix": "/lib/fonts.js", "path": "modules/production/engines/canvas/support/fonts.js", "exact": true},
+    {"prefix": "/lib/util.js", "path": "modules/production/engines/canvas/support/util.js", "exact": true},
+    {"prefix": "/lib/fonts/", "path": "modules/production/engines/canvas/fonts"},
+    {"prefix": "/lib/", "path": "modules/creative/canvas/lib"},
+    {"prefix": "/scenes/index.js", "path": "modules/production/engines/canvas/scene-loader.js", "exact": true},
+    {"prefix": "/scenes/", "path": "modules/creative/canvas/scenes"},
+    {"prefix": "/clips/", "path": "modules/creative/canvas/clips"},
+    {"prefix": "/demos/", "path": "modules/creative/examples/demos"},
+    {"prefix": "/eras", "path": "modules/creative/examples/art-history", "preserve_url": true},
+    {"prefix": "/transitions.js", "path": "modules/creative/canvas/transitions.js", "exact": true}
+  ]
+}

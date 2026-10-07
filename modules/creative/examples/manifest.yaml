@@ -1,0 +1,70 @@
+version: 1
+source:
+  project: huashu-art-motion
+  snapshot_version: unknown
+demos:
+  - id: t1_3b1b
+    path: modules/creative/examples/demos/t1_3b1b
+    grammar: t1_3b1b
+    status: runnable_demo
+    allowed_usage: demo_only
+    notes: 示例图解内容不能当作本项目事实。
+  - id: t2_keynote_ui
+    path: modules/creative/examples/demos/t2_keynote_ui
+    grammar: t2_keynote_ui
+    status: runnable_demo
+    allowed_usage: demo_only
+    notes: 正式界面应来自本项目素材或明确标记的重绘。
+  - id: t3_finance_chart
+    path: modules/creative/examples/demos/t3_finance_chart
+    grammar: t3_finance_chart
+    status: runnable_demo
+    allowed_usage: demo_only
+    notes: 示例图表数据为虚构，正式数据必须有可核对来源。
+  - id: y1_kurzgesagt
+    path: modules/creative/examples/demos/y1_kurzgesagt
+    grammar: y1_kurzgesagt
+    status: runnable_demo
+    allowed_usage: demo_only
+    notes: 使用其系统图解能力，不默认采用样片角色或叙事。
+  - id: y2_vox
+    path: modules/creative/examples/demos/y2_vox
+    grammar: y2_vox
+    status: runnable_demo
+    allowed_usage: demo_only
+    notes: 正式项目须提供真实、可合法使用的档案或图像来源。
+  - id: y3_whiteboard
+    path: modules/creative/examples/demos/y3_whiteboard
+    grammar: y3_whiteboard
+    status: runnable_demo
+    allowed_usage: demo_only
+    notes: 演示白板推导需由本项目内容顺序替换。
+  - id: y4_storytime
+    path: modules/creative/examples/demos/y4_storytime
+    grammar: y4_storytime
+    status: runnable_demo
+    allowed_usage: demo_only
+    notes: 使用真实经历和获准角色素材，不将演示人物当作本项目IP。
+  - id: y5_kinetic_type
+    path: modules/creative/examples/demos/y5_kinetic_type
+    grammar: y5_kinetic_type
+    status: runnable_demo
+    allowed_usage: demo_only
+    notes: 用项目实际文案替换演示短句，保留原意和必要限定。
+  - id: long_scroll
+    path: modules/creative/examples/demos/long_scroll
+    grammar: long_scroll
+    status: partial_demo
+    allowed_usage: demo_only
+    notes: 当前只有三个场景段，不代表完整24段长片。
+reference_only:
+  - id: y6_presenter_explainer
+    path: modules/creative/styles/grammars/y6_presenter_explainer.md
+    status: no_parameterized_clip
+    missing: [presenter_frames, project_audio]
+assets:
+  - id: huashu_demo_hero
+    path: modules/creative/examples/demos/_shared/hero
+    source: huashu demo author character sprites
+    allowed_usage: demo_only
+    formal_project_default: false

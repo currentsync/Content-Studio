@@ -1,0 +1,54 @@
+version: 1
+style_owner: creative
+selection_rule: 根据 Editorial 制作稿的理解目标、内容材料和受众选择；不要强制所有项目使用同一语法。
+clip_grammars:
+  - id: t1_3b1b
+    status: usable
+    cue_kinds: [equation, highlight, line, point, title]
+    guide: modules/creative/styles/grammars/t1_3b1b.md
+    demo: modules/creative/examples/demos/t1_3b1b
+  - id: t2_keynote_ui
+    status: usable
+    cue_kinds: [card, highlight, number, title]
+    guide: modules/creative/styles/grammars/t2_keynote_ui.md
+    demo: modules/creative/examples/demos/t2_keynote_ui
+  - id: t3_finance_chart
+    status: usable
+    cue_kinds: [bar, highlight, title]
+    guide: modules/creative/styles/grammars/t3_finance_chart.md
+    demo: modules/creative/examples/demos/t3_finance_chart
+    evidence_rule: 正式数字必须来自项目可追溯的数据源。
+  - id: y1_kurzgesagt
+    status: usable
+    cue_kinds: [enter, highlight, point, title]
+    guide: modules/creative/styles/grammars/y1_kurzgesagt.md
+    demo: modules/creative/examples/demos/y1_kurzgesagt
+  - id: y2_vox
+    status: usable
+    cue_kinds: [highlight, image, point, title]
+    guide: modules/creative/styles/grammars/y2_vox.md
+    demo: modules/creative/examples/demos/y2_vox
+    evidence_rule: 需要真实且获准使用的图像、文档或地图；不得伪造档案。
+  - id: y3_whiteboard
+    status: usable
+    cue_kinds: [draw, highlight, point, title]
+    guide: modules/creative/styles/grammars/y3_whiteboard.md
+    demo: modules/creative/examples/demos/y3_whiteboard
+  - id: y4_storytime
+    status: usable
+    cue_kinds: [highlight, insert, point, react]
+    guide: modules/creative/styles/grammars/y4_storytime.md
+    demo: modules/creative/examples/demos/y4_storytime
+  - id: y5_kinetic_type
+    status: usable
+    cue_kinds: [highlight, point, title]
+    guide: modules/creative/styles/grammars/y5_kinetic_type.md
+    demo: modules/creative/examples/demos/y5_kinetic_type
+reference_only:
+  - id: y6_presenter_explainer
+    guide: modules/creative/styles/grammars/y6_presenter_explainer.md
+    reason: 无参数化clip，且缺少人物帧和音频素材。
+art_scenes:
+  directory: modules/creative/canvas/scenes
+  count: 35
+  note: 独立艺术场景按本段理解任务组合，不代表额外35套完整视频语法。

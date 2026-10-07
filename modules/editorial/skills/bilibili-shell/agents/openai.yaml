@@ -1,0 +1,4 @@
+interface:
+  display_name: "Bilibili Shell"
+  short_description: "Adapt BaseShell for Bilibili"
+  default_prompt: "Adapt a selected BaseShell into Bilibili channel Shell candidates."
